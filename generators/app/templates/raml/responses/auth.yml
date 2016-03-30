@@ -1,0 +1,32 @@
+400:
+  description: Bad Request
+  body:
+    application/json:
+      example: |
+        {
+          "result": {
+            "statusCode": 400,
+            "code": "GEN500",
+            "message": "\"password\" is required"
+          }
+        }
+401:
+  description: Wrong credentials Unauthorized
+  body:
+    application/json:
+      example: |
+        {
+          "result": {
+            "statusCode": 401,
+            "code": "GEN500",
+            "message": "User credentials are not correct"
+          }
+        }
+200:
+  description: User authorized - OK
+  body:
+    application/json:
+      example: |
+        {
+          "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IndlYm5hdG9yQGdtYWlsLmNvbSIsInV1aWQiOiI2M2RiYjVhZS01MjNmLTQzMjMtYjdkZS0yY2Y4NDQ0MWExMDIiLCJpYXQiOjE0NTgyODk1NTh9.n3q1v-IwccbG5vrODoKOiVHps7NRCq_oHB2bZpWfGVg"
+        }

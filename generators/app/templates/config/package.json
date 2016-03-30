@@ -1,0 +1,40 @@
+{
+  "name": "<%= appUppercaseName %>",
+  "version": "0.0.1",
+  "description": "Generic backend Hapi App generated with the hapi-rest generator",
+  "main": "server/app.js",
+  "dependencies": {
+    "hapi": "11.x.x",
+    "hapi-auth-jwt2": "5.2.1",
+    "hapi-mongodb": "4.1.0",
+    "inert": "3.2.0",
+    "joi": "7.0.1",
+    "lodash": "3.10.1",
+    "q": "1.4.1",
+    "uuid": "2.0.1",
+    "vision": "4.0.1",
+    "winston": "2.2.0",
+    "request": "2.69.0"
+  },
+  "devDependencies": {
+    "gulp-jasmine": "^2.3.0",
+    "gulp-jshint": "2.0.0",
+    "gulp-nodemon": "2.0.4",
+    "gulp-process-env": "0.0.1",
+    "gulp-raml2html": "^0.2.0",
+    "jasmine": "^2.4.1",
+    "jasmine-node": "^1.14.5",
+    "jshint": "2.x",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.8",
+    "rewire": "^2.5.1"
+  },
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "scripts": {
+    "start": "node server/app.js",
+    "test": "jasmine-node tests --config AGGREGATOR_NODE_ENV test --color"
+  },
+  "private": true
+}

@@ -1,0 +1,20 @@
+#%RAML 0.8
+---
+title: "<%= appName %>"
+version: v1
+baseUri: /{version}/
+
+schemas:
+  - auth: !include schemas/auth.json
+
+mediaType: application/json
+
+## Resource for Auth
+/auth:
+  description: User Authentication endpoint
+  post:
+    description: Gets the jwt token for the user
+    body:
+      schema: auth
+      example: !include schemas/examples/auth.json
+    responses: !include responses/auth.yml

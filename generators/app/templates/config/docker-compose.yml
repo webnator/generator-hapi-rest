@@ -1,0 +1,17 @@
+<%= appName %>:
+  container_name: <%= appName %>
+  command: "<%= appName %>/loc"
+  image: dev.docker.kickstartteam.es:5000/kst/framework/<%= appName %>:0.0.2
+  links:
+    - mongo
+  ports:
+    - "9000:9000"
+  environment:
+    CONSUL: dev.consul.kickstartteam.es:8500
+
+mongo:
+  container_name: genesis-mongo
+  command: '--smallfiles --dbpath=/tmp'
+  ports:
+    - "27017:27017"
+  image: dev.docker.kickstartteam.es:5000/kst/mongo:latest
