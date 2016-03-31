@@ -1,0 +1,3 @@
+FROM 'DOCKER_REPO'nodejs:onbuild
+
+EXPOSE 9000

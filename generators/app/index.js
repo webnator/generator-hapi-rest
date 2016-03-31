@@ -23,7 +23,38 @@ module.exports = yeoman.Base.extend({
       'Welcome to the exclusive ' + chalk.red('generator-hapi-rest') + ' generator!'
     ));
 
-    var prompts = [];
+    var prompts = [
+      {
+        type: 'input',
+        name: 'appPrefix',
+        message: 'What will be the preffix of your application:',
+        default: this.appName
+      },
+      {
+        type: 'confirm',
+        name: 'appRAML',
+        message: 'Would you like to enable RAML documentation?',
+        default: true
+      },
+      {
+        type: 'confirm',
+        name: 'appTesting',
+        message: 'Would you like to enable testing with Jasmine?',
+        default: true
+      },
+      {
+        type: 'confirm',
+        name: 'appHealth',
+        message: 'Would you like to set a \'Health Check\' endpoint?',
+        default: true
+      },
+      {
+        type: 'confirm',
+        name: 'appAuth',
+        message: 'Would you like to set up an authentication boilerplate with jwt?',
+        default: true
+      }
+    ];
 
     if (!this.projectName) {
       var namePrompt = {
@@ -32,15 +63,16 @@ module.exports = yeoman.Base.extend({
         message: 'What\'s the name of your application:',
         default: this.appName
       };
-      prompts.push(namePrompt);
+      prompts.unshift(namePrompt);
     }
 
     this.prompt(prompts, function (props) {
       this.props = props;
+      this.props.appPrefix = _.toUpper(this.props.appPrefix);
       if (!this.projectName) {
         this.projectName = _.camelCase(this.props.appName);
       }
-    
+
       done();
     }.bind(this));
   },
@@ -48,40 +80,53 @@ module.exports = yeoman.Base.extend({
   writing: function () {
     this.destinationRoot(this.projectName);
 
+    var templateVars = {
+      appUppercaseName: _.toUpper(this.projectName),
+      appName: this.projectName,
+      appPrefix: this.props.appPrefix
+    }
+
     this.template(
       this.templatePath('server/**'),
       this.destinationPath('server'),
-      {
-        appUppercaseName: _.toUpper(this.projectName),
-        appName: this.projectName
-      }
+      templateVars
     );
+    if (this.props.appRAML === true) {
+      this.template(
+        this.templatePath('raml/**'),
+        this.destinationPath('raml'),
+        templateVars
+      );
+    }
 
-    this.template(
-      this.templatePath('raml/**'),
-      this.destinationPath('raml'),
-      {
-        appUppercaseName: _.toUpper(this.projectName),
-        appName: this.projectName
-      }
-    );
+    if (this.props.appTesting === true) {
+      this.template(
+        this.templatePath('tests/**'),
+        this.destinationPath('tests'),
+        templateVars
+      );
+    }
 
-    this.template(
-      this.templatePath('tests/**'),
-      this.destinationPath('tests'),
-      {
-        appUppercaseName: _.toUpper(this.projectName),
-        appName: this.projectName
-      }
-    );
+    if (this.props.appHealth === true) {
+      this.template(
+        this.templatePath('extra_apis/health/**'),
+        this.destinationPath('server/api/health'),
+        templateVars
+      );
+    }
+
+    if (this.props.appAuth === true) {
+      this.template(
+        this.templatePath('extra_apis/auth/**'),
+        this.destinationPath('server/api/auth'),
+        templateVars
+      );
+    }
 
     this.template(
       this.templatePath('config/**'),
       this.destinationPath(''),
-      {
-        appUppercaseName: _.toUpper(this.projectName),
-        appName: this.projectName
-      }
+      templateVars
     );
 
     this.copy(
@@ -92,6 +137,13 @@ module.exports = yeoman.Base.extend({
   },
 
   install: function () {
+    this.spawnCommand('git', ['init']);
     this.npmInstall();
+  },
+
+  end: function () {
+    this.log(yosay(
+      'Thanks for using ' + chalk.red('generator-hapi-rest') + ' if you like it, buy me a beer!'
+    ));
   }
 });

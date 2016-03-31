@@ -34,7 +34,7 @@
   },
   "scripts": {
     "start": "node server/app.js",
-    "test": "jasmine-node tests --config AGGREGATOR_NODE_ENV test --color"
+    "test": "jasmine-node tests --config <%= appPrefix %>_NODE_ENV test --color"
   },
   "private": true
 }

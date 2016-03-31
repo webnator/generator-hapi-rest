@@ -25,12 +25,12 @@ gulp.task('start', ['apidoc'], function () {
 gulp.task('apidoc', function() {
   return gulp.src('raml/api.raml')
     .pipe(raml2html())
-    .pipe(gulp.dest('server/api/documentation'));
+    .pipe(gulp.dest('documentation'));
 });
 
 
 gulp.task('test', function() {
-  var env = processEnv({AGGREGATOR_NODE_ENV: 'test'});
+  var env = processEnv({<%= appPrefix %>_NODE_ENV: 'test'});
   return gulp.src('tests/**/*.js')
     .pipe(env)           // Sets the environment
     .pipe(jasmine())

@@ -5,7 +5,7 @@
 'use strict';
 
 // Set default node environment to development
-process.env.<%= appUppercaseName %>_NODE_ENV = process.env.<%= appUppercaseName %>_NODE_ENV || 'development';
+process.env.<%= appPrefix %>_NODE_ENV = process.env.<%= appPrefix %>_NODE_ENV || 'development';
 
 var Hapi          = require('hapi');
 var config        = require('./config/environment');

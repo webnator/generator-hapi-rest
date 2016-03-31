@@ -11,7 +11,7 @@ var log             = Utils.log;
 var USERS_NAME_COLLECTION = 'users';
 
 exports.healthCheck = function(request, reply, next) {
-  var logData = {uuid: Utils.generateUuid(), method: request.method.toUpperCase(),path: request.path};
+  var logData = Utils.logData(request);
   log('info', logData, 'healthCheck', request.payload);
   var colUser = Utils.getCollection(USERS_NAME_COLLECTION);
 

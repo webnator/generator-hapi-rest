@@ -12,8 +12,8 @@ function requiredProcessEnv(name) {
 // All configurations will extend these options
 // ============================================
 var all = {
-  env: process.env.<%= appUppercaseName %>_NODE_ENV,
-  host: process.env.<%= appUppercaseName %>_IP || 'localhost',
+  env: process.env.<%= appPrefix %>_NODE_ENV,
+  host: process.env.<%= appPrefix %>_IP || 'localhost',
   appName: '<%= appName %>',
   routes: {
     prefix: '/v1/<%= appName %>'
@@ -21,10 +21,10 @@ var all = {
   salt: '<%= appName %>s4ltv4lu3'
 };
 
-console.log('Runing in ', process.env.<%= appUppercaseName %>_NODE_ENV, 'mode');
+console.log('Runing in ', process.env.<%= appPrefix %>_NODE_ENV, 'mode');
 
 // Export the config object based on the NODE_ENV
 // ==============================================
 module.exports = _.merge(
   all,
-  require('./' + process.env.<%= appUppercaseName %>_NODE_ENV) || {});
+  require('./' + process.env.<%= appPrefix %>_NODE_ENV) || {});

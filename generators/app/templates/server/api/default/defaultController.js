@@ -1,6 +1,6 @@
 'use strict';
 
-var DefaultResponses = require('./defaultResponses');
+var defaultResponses = require('./defaultResponses');
 
 var Errors        = require('../../components/errors');
 var Utils         = require('../../components/utils');
@@ -11,24 +11,22 @@ var log           = Utils.log;
 exports.getDefault = function(request, reply, next) {
   var data = {
     logData : Utils.logData(request),
-    query   : request.query,
+    payload : request.query,
     schema  : new DefaultModelJoi()
   };
   var response;
   log('info', data.logData, 'getDefault Accessing');
 
   Utils.validateSchema(data)
-    .then(_userUtils.userExistsKo)
-    .then(_userUtils.appAuthorized)
-    .then(_userUtils.userInsert)
+    .then(_userUtils.defaultAction)
     .then(function(){
-      response = Utils.createResponseData(DefaultResponses.user_signed_up_ok);
-      log('info', data.logData, 'userCreate OK response', response);
+      response = Utils.createResponseData(defaultResponses.all_ok);
+      log('info', data.logData, 'getDefault OK response', response);
       return reply(response).code(response.result.statusCode);
     })
     .fail(function(err){
       response = Errors.createGeneralError(err);
-      log('error', data.logData, 'userCreate KO - Error: ', response);
+      log('error', data.logData, 'getDefault KO - Error: ', response);
       return reply(response).code(err.statusCode);
     });
 };

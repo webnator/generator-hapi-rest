@@ -1,13 +1,12 @@
 'use strict';
 var Joi       = require('joi');
 
-function userModelJoi() {
+function defaultModelJoi() {
   var schema = Joi.object().keys({
-    email       : Joi.string().email().trim().required(),
-    password    : Joi.string().min(6).max(20).trim().required(),
-    application : Joi.string().required()
+    email       : Joi.string().email().trim(),
+    password    : Joi.string().min(6).max(20).trim()
   });
   return schema;
 }
 
-module.exports = userModelJoi;
+module.exports = defaultModelJoi;

@@ -4,15 +4,15 @@
 // =================================
 module.exports = {
   // Server IP
-  ip: process.env.<%= appUppercaseName %>_IP ||
+  ip: process.env.<%= appPrefix %>_IP ||
     'localhost',
 
   // Server port
-  port: process.env.<%= appUppercaseName %>_PORT ||
+  port: process.env.<%= appPrefix %>_PORT ||
     8080,
 
   mongoSettings   : {
-    "url": "mongodb://" + process.env.<%= appUppercaseName %>_MONGO_IP + ":" + process.env.<%= appUppercaseName %>_MONGO_PORT + "/" + process.env.<%= appUppercaseName %>_DDBB_NAME,
+    "url": "mongodb://" + process.env.<%= appPrefix %>_MONGO_IP + ":" + process.env.<%= appPrefix %>_MONGO_PORT + "/" + process.env.<%= appPrefix %>_DDBB_NAME,
     "settings": {
       "db": {
         "native_parser": false
@@ -21,6 +21,6 @@ module.exports = {
   },
   secretKey       : '<%= appName %>ApiSecretKey',
   salt            : '<%= appName %>s4ltv4lu3',
-  loggerLevel     : process.env.<%= appUppercaseName %>_LOGLEVEL || 'debug',
+  loggerLevel     : process.env.<%= appPrefix %>_LOGLEVEL || 'debug',
 
 };
