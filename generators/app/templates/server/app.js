@@ -10,16 +10,15 @@ process.env.<%= appPrefix %>_NODE_ENV = process.env.<%= appPrefix %>_NODE_ENV ||
 var Hapi          = require('hapi');
 var config        = require('./config/environment');
 var GlobalModule  = require('./components/global.js');
-var hapiAuthJWT   = require('hapi-auth-jwt2');
-var JWT           = require('jsonwebtoken');
-var authC         = require('./api/auth/authController');
+<% if (usesAuth) { %>var hapiAuthJWT   = require('hapi-auth-jwt2');
+var authC         = require('./api/auth/authController');<% } %>
 
 // Create a server with a host and port
 var server = new Hapi.Server();
 server.connection({port: config.port , routes: { cors: true }});
-
+<% if (usesAuth) { %>
 // JWT Auth Strategy
-server.register(hapiAuthJWT, function (err) {
+server.register(hapiAuthJWT, function () {
   server.auth.strategy('jwt', 'jwt', true,
   { key: config.secretKey,
     validateFunc: authC.isAuthenticated,
@@ -30,6 +29,7 @@ server.register(hapiAuthJWT, function (err) {
     }
   });
 });
+<% } %>
 
 // Register the server and start the application
 server.register([
@@ -41,10 +41,12 @@ server.register([
   {routes: {prefix: config.routes.prefix}},
 
   function(err) {
-    if (err) throw err;
+    if (err) {
+      throw err;
+    }
     server.start(function() {
       console.log('Server running at', server.info.uri);
       GlobalModule.setConfigValue('db', server.plugins['hapi-mongodb'].db);
-    })
+    });
   }
 );

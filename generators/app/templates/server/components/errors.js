@@ -1,6 +1,5 @@
 'use strict';
 
-var GlobalModule = require('./global');
 var Responses = require('./responses');
 
 exports.createGeneralError = function (err) {
@@ -10,6 +9,6 @@ exports.createGeneralError = function (err) {
       code      : err.code || Responses.general500.code,
       message   : err.message
     }
-  }
+  };
   return error;
 };

@@ -1,3 +1,5 @@
+'use strict';
+
 var config = {};
 
 exports.getConfigValue = function(param) {
@@ -5,7 +7,8 @@ exports.getConfigValue = function(param) {
 };
 
 exports.setConfigValue = function(param, value) {
-  return config[param] = value;
+  config[param] = value;
+  return config[param];
 };
 
 exports.getConfigList = function() {

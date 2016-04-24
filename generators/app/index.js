@@ -53,6 +53,12 @@ module.exports = yeoman.Base.extend({
         name: 'appAuth',
         message: 'Would you like to set up an authentication boilerplate with jwt?',
         default: true
+      },
+      {
+        type: 'input',
+        name: 'appRepo',
+        message: 'What is the url of the repository? (Leave blank for no repository)',
+        default: ''
       }
     ];
 
@@ -83,14 +89,21 @@ module.exports = yeoman.Base.extend({
     var templateVars = {
       appUppercaseName: _.toUpper(this.projectName),
       appName: this.projectName,
-      appPrefix: this.props.appPrefix
-    }
+      appPrefix: this.props.appPrefix,
+      dockerRepo: "dev.docker.kickstartteam.es:5000/kst",
+      consulRepo: "dev.consul.kickstartteam.es:8500",
+      usesRAML: this.props.appRAML,
+      usesTests: this.props.appTesting,
+      usesHealth: this.props.appHealth,
+      usesAuth: this.props.appAuth
+    };
 
     this.template(
       this.templatePath('server/**'),
       this.destinationPath('server'),
       templateVars
     );
+
     if (this.props.appRAML === true) {
       this.template(
         this.templatePath('raml/**'),
@@ -101,10 +114,18 @@ module.exports = yeoman.Base.extend({
 
     if (this.props.appTesting === true) {
       this.template(
-        this.templatePath('tests/**'),
-        this.destinationPath('tests'),
+        this.templatePath('tests/utils/**'),
+        this.destinationPath('tests/utils'),
         templateVars
       );
+
+      if (this.props.appHealth === true) {
+        this.template(
+          this.templatePath('tests/health/**'),
+          this.destinationPath('tests/health'),
+          templateVars
+        );
+      }
     }
 
     if (this.props.appHealth === true) {
@@ -133,11 +154,40 @@ module.exports = yeoman.Base.extend({
       this.templatePath('hidden/gitignore'),
       this.destinationPath('.gitignore')
     );
+    this.copy(
+      this.templatePath('hidden/jshintrc'),
+      this.destinationPath('.jshintrc')
+    );
+
+    if (this.props.appRepo !== '' && this.props.appRepo.toUpperCase().substr(0,4) !== 'HTTP') {
+      this.props.appRepo = 'git@github.com:webnator/' + this.props.appRepo + '.git';
+    }
+
+    this.config.save();
+    this.config.set('appRAML', this.props.appRAML);
+    this.config.set('appTesting', this.props.appTesting);
+    this.config.set('appHealth', this.props.appHealth);
+    this.config.set('appAuth', this.props.appAuth);
+    this.config.set('appName', this.projectName);
+    this.config.set('appPrefix', this.props.appPrefix);
+    this.config.set('appRepo', this.props.appRepo);
 
   },
 
   install: function () {
-    this.spawnCommand('git', ['init']);
+    this.composeWith('hapi-rest:module', {
+      args: ['defaultModule']
+    });
+
+    this.spawnCommandSync('git', ['init']);
+    console.log('rep', this.props.appRepo);
+    if (this.props.appRepo !== '') {
+      this.spawnCommandSync('git', ['remote', 'add', 'origin', this.props.appRepo]);
+      this.spawnCommandSync('git', ['add', '--all']);
+      this.spawnCommandSync('git', ['commit', '-m', '"initial commit from generator"']);
+      this.spawnCommandSync('git', ['push', '-u', 'origin', 'master']);
+    }
+
     this.npmInstall();
   },
 

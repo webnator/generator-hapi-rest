@@ -8,7 +8,7 @@ var DefaultModelJoi  = require('./models/defaultModelJoi');
 var _userUtils    = require('./defaultUtils');
 var log           = Utils.log;
 
-exports.getDefault = function(request, reply, next) {
+exports.getDefault = function(request, reply) {
   var data = {
     logData : Utils.logData(request),
     payload : request.query,

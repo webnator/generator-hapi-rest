@@ -17,24 +17,24 @@
     "request": "2.69.0"
   },
   "devDependencies": {
-    "gulp-jasmine": "^2.3.0",
+    "jshint": "2.x",
     "gulp-jshint": "2.0.0",
     "gulp-nodemon": "2.0.4",
+    "gulp-shell": "^0.5.2"
+    <% if (usesRAML) { %>, "gulp-raml2html": "^0.2.0"<% } %>
+    <% if (usesTests) { %>, "gulp-istanbul": "^0.10.4",
+    "gulp-jasmine": "^2.3.0",
     "gulp-process-env": "0.0.1",
-    "gulp-raml2html": "^0.2.0",
-    "jasmine": "^2.4.1",
+    "isparta": "^4.0.0",
     "jasmine-node": "^1.14.5",
-    "jshint": "2.x",
-    "karma-chrome-launcher": "^0.2.2",
-    "karma-jasmine": "^0.3.8",
-    "rewire": "^2.5.1"
+    "rewire": "^2.5.1"<% } %>
   },
   "engines": {
     "node": ">=0.12.0"
   },
   "scripts": {
-    "start": "node server/app.js",
-    "test": "jasmine-node tests --config <%= appPrefix %>_NODE_ENV test --color"
+    "start": "node server/app.js"<% if (usesTests) { %>,
+    "test": "jasmine-node tests --config <%= appPrefix %>_NODE_ENV test --color"<% } %>
   },
   "private": true
 }

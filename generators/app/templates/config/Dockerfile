@@ -1,3 +1,3 @@
-FROM 'DOCKER_REPO'nodejs:onbuild
+FROM <%= dockerRepo %>/nodejs:onbuild
 
 EXPOSE 9000
