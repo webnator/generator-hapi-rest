@@ -10,14 +10,10 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.argument('projectName', { type: String, optional: true, required: false, desc: 'Name for the project' });
-    if (this.projectName) {
-      this.projectName = _.camelCase(this.projectName);
-    }
 
   },
   prompting: function () {
     var done = this.async();
-
     // Have Yeoman greet the user.
     this.log(yosay(
       'Welcome to the exclusive ' + chalk.red('generator-hapi-rest') + ' generator!'
@@ -76,7 +72,7 @@ module.exports = yeoman.Base.extend({
       this.props = props;
       this.props.appPrefix = _.toUpper(this.props.appPrefix);
       if (!this.projectName) {
-        this.projectName = _.camelCase(this.props.appName);
+        this.projectName = this.props.appName;
       }
 
       done();
@@ -84,10 +80,17 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function () {
+    this.projectName = _.deburr(this.projectName);
+    this.projectName = _.kebabCase(this.projectName);
+
+    this.cleanProjectName = _.camelCase(this.projectName);
+    this.cleanProjectName = _.toLower(this.cleanProjectName);
+
     this.destinationRoot(this.projectName);
 
     var templateVars = {
-      appUppercaseName: _.toUpper(this.projectName),
+      appUppercaseName: _.toUpper(this.cleanProjectName),
+      cleanProjectName: this.cleanProjectName,
       appName: this.projectName,
       appPrefix: this.props.appPrefix,
       dockerRepo: "dev.docker.kickstartteam.es:5000/kst",
@@ -159,8 +162,9 @@ module.exports = yeoman.Base.extend({
       this.destinationPath('.jshintrc')
     );
 
-    if (this.props.appRepo !== '' && this.props.appRepo.toUpperCase().substr(0,4) !== 'HTTP') {
-      this.props.appRepo = 'git@github.com:webnator/' + this.props.appRepo + '.git';
+    if (this.props.appRepo !== '' && this.props.appRepo.toUpperCase().substr(0,4) !== 'GIT') {
+      // this.props.appRepo = 'git@github.com:webnator/' + this.props.appRepo + '.git';
+      this.props.appRepo = 'git@gitlab.digitalservices.es:kst/' + this.props.appRepo + '.git';
     }
 
     this.config.save();
@@ -187,6 +191,8 @@ module.exports = yeoman.Base.extend({
       this.spawnCommandSync('git', ['commit', '-m', '"initial commit from generator"']);
       this.spawnCommandSync('git', ['push', '-u', 'origin', 'master']);
     }
+
+    this.spawnCommand('sh', [this.sourceRoot() + '/../ops/consulVars.sh', this.projectName + '/dev', this.props.appPrefix, this.projectName]);
 
     this.npmInstall();
   },

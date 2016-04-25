@@ -25,6 +25,12 @@ PUSHED=`git status -b --porcelain  | grep "ahead"`
 
 if [[ -z "$CHANGES" && -z "$PUSHED" ]]; then
 
+  DOCKER_MACHINE=`docker-machine status default`
+  if [ "$DOCKER_MACHINE" != "Running" ]; then
+    echo "Docker machine is not running. Please start it"
+    exit
+  fi
+
   if [ "$(tr [A-Z] [a-z] <<< "$OS")" == "darwin" ]; then
     eval "$(docker-machine env default)"
   fi
@@ -39,6 +45,7 @@ if [[ -z "$CHANGES" && -z "$PUSHED" ]]; then
   # Uploads the tag to the repository
   git tag -d $TAG_CODE
   `git tag -a $TAG_CODE -m "$TAG_MSG"`
+  `git push origin :refs/tags/$TAG_CODE`
   `git push origin $TAG_CODE`
 
   echo "\n================================================="

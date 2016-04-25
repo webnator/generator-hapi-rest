@@ -10,10 +10,6 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.argument('moduleName', { type: String, optional: true, required: false, desc: 'Name for the module' });
-    if (this.moduleName) {
-      this.moduleName = _.camelCase(this.moduleName);
-    }
-
   },
   prompting: function () {
     var done = this.async();
@@ -34,7 +30,7 @@ module.exports = yeoman.Base.extend({
       this.props = props;
       this.props.appPrefix = _.toUpper(this.props.appPrefix);
       if (!this.moduleName) {
-        this.moduleName = _.camelCase(this.props.modName);
+        this.moduleName = this.props.modName;
       }
 
       done();
@@ -42,12 +38,16 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function () {
-    this.destinationRoot(this.projectName);
+    this.moduleName = _.camelCase(this.moduleName);
 
     var usesTests = this.config.get('appTesting');
 
+    this.cleanProjectName = _.camelCase(this.config.get('appName'));
+    this.cleanProjectName = _.toLower(this.cleanProjectName);
+
     var templateVars = {
-      appUppercaseName: _.toUpper(this.config.get('appName')),
+      appUppercaseName: _.toUpper(this.cleanProjectName),
+      cleanProjectName: this.cleanProjectName,
       appName: this.config.get('appName'),
       appPrefix: this.props.appPrefix,
       moduleName: this.moduleName,
