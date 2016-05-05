@@ -98,7 +98,9 @@ module.exports = yeoman.Base.extend({
       usesRAML: this.props.appRAML,
       usesTests: this.props.appTesting,
       usesHealth: this.props.appHealth,
-      usesAuth: this.props.appAuth
+      usesAuth: this.props.appAuth,
+      groupedApp: false,
+      appGroup: ''
     };
 
     this.template(
@@ -117,8 +119,14 @@ module.exports = yeoman.Base.extend({
 
     if (this.props.appTesting === true) {
       this.template(
-        this.templatePath('tests/utils/**'),
-        this.destinationPath('tests/utils'),
+        this.templatePath('tests/components/**'),
+        this.destinationPath('tests/components'),
+        templateVars
+      );
+
+      this.template(
+        this.templatePath('tests/server/**'),
+        this.destinationPath('tests/server'),
         templateVars
       );
 

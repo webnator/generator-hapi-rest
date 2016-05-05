@@ -1,10 +1,12 @@
+"use strict";
+
 var rewire = require("rewire");
 
 describe('Utils functions', function () {
 
-	var utils = rewire('../../server/components/utils.js');
+  var utils = rewire('../../server/components/utils.js');
   var GlobalModuleMock;
-	beforeEach(function() {
+  beforeEach(function() {
 
     GlobalModuleMock = {
       getConfigValue: {}
@@ -13,7 +15,7 @@ describe('Utils functions', function () {
 
   });
 
-	it('getCollection: should call GlobalModule with the right parameters', function () {
+  it('getCollection: should call GlobalModule with the right parameters', function () {
     var coll = jasmine.createSpy('coll');
     spyOn(GlobalModuleMock, 'getConfigValue').and.callFake(function () {
       return {
@@ -27,27 +29,27 @@ describe('Utils functions', function () {
   });
 
   it('generateUuid: should return a valid UUID', function () {
-		expect(utils.generateUuid()).toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
+    expect(utils.generateUuid()).toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
   });
 
   it('generateToken: should return a valid Token', function () {
-		var token = utils.generateToken(12);
-		expect(typeof token).toBe('string');
-		expect(token.length).toBeGreaterThan(0);
+    var token = utils.generateToken(12);
+    expect(typeof token).toBe('string');
+    expect(token.length).toBeGreaterThan(0);
   });
 
   it('logData: should return a valid logData response', function () {
-		var reqData = {
-			method: 'TEST',
-			path: 'TEST/PATH',
-			testData: 'NOT SHOW'
-		};
-		var resultData = utils.logData(reqData);
-		expect(typeof resultData).toBe('object');
-		expect(resultData.method).toEqual(reqData.method);
-		expect(resultData.path).toEqual(reqData.path);
-		expect(resultData.testData).toBe(undefined);
-		expect(resultData.uuid).toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
+    var reqData = {
+      method: 'TEST',
+      path: 'TEST/PATH',
+      testData: 'NOT SHOW'
+    };
+    var resultData = utils.logData(reqData);
+    expect(typeof resultData).toBe('object');
+    expect(resultData.method).toEqual(reqData.method);
+    expect(resultData.path).toEqual(reqData.path);
+    expect(resultData.testData).toBe(undefined);
+    expect(resultData.uuid).toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
   });
 
   describe('createResponseData function', function () {
@@ -128,9 +130,9 @@ describe('Utils functions', function () {
         schema: {}
       };
       utils.validateSchema(data)
-        .then((response) => {
+        .then(function (response) {
           done().fail('Promise should NOT be resolved');
-        }).catch((err) => {
+        }).catch(function (err) {
         done();
       });
     });
@@ -151,10 +153,10 @@ describe('Utils functions', function () {
       };
       utils.validateSchema(data)
         .then((response) => {
-          done();
-        }).catch((err) => {
+        done();
+    }).catch((err) => {
         done().fail('Promise should be resolved');
-      });
+    });
     });
 
   });
@@ -169,16 +171,18 @@ describe('Utils functions', function () {
           url: 'TEST'
         }
       };
+      utils.__set__('log', jasmine.createSpy('logSpy'));
+    });
+
+    afterEach(function () {
+
     });
 
     it('should call the req library with the correct parameters', function () {
       var reqSpy = jasmine.createSpy('reqSpy');
       utils.__set__('req', reqSpy);
-      spyOn(utils, 'log');
       utils.sendRequest(data);
-
       expect(reqSpy).toHaveBeenCalled();
-      expect(1).toBe(1);
       expect(reqSpy.calls.argsFor(0)[0]).toEqual(data.reqData);
     });
 
@@ -189,15 +193,14 @@ describe('Utils functions', function () {
           callback(undefined, {}, '{ "myObject": "test" }');
         });
         utils.__set__('req', reqSpy);
-        spyOn(utils, 'log');
         utils.sendRequest(data)
           .then((response) => {
-            body = response.reqData.body;
-            done();
-          })
-          .catch((err) => {
-            done.fail('Promise should be resolved');
-          });
+          body = response.reqData.body;
+        done();
+      })
+        .catch((err) => {
+          done.fail('Promise should be resolved');
+      });
       });
 
       it('should parse the body to an object if it is a string', function () {
@@ -205,7 +208,7 @@ describe('Utils functions', function () {
       });
 
       it('should have called the log function twice', function () {
-        expect(utils.log.calls.count()).toBe(2);
+        expect(utils.__get__('log')).toHaveBeenCalled();
       });
     });
 
@@ -216,15 +219,14 @@ describe('Utils functions', function () {
           callback(undefined, {}, { myObject: 'test' });
         });
         utils.__set__('req', reqSpy);
-        spyOn(utils, 'log');
         utils.sendRequest(data)
           .then((response) => {
-            body = response.reqData.body;
-            done();
-          })
-          .catch((err) => {
-            done.fail('Promise should be resolved');
-          });
+          body = response.reqData.body;
+        done();
+      })
+        .catch((err) => {
+          done.fail('Promise should be resolved');
+      });
       });
 
       it('should return the body as is', function () {
@@ -239,18 +241,17 @@ describe('Utils functions', function () {
           callback(true, {}, '{ "myObject": "test" }');
         });
         utils.__set__('req', reqSpy);
-        spyOn(utils, 'log');
         utils.sendRequest(data)
           .then((response) => {
-            done.fail('Promise should NOT be resolved');
-          })
-          .catch((error) => {
-            err = error;
-            done();
-          });
+          done.fail('Promise should NOT be resolved');
+      })
+        .catch((error) => {
+          err = error;
+        done();
+      });
       });
       it('should have called the log function twice', function () {
-        expect(utils.log.calls.count()).toBe(2);
+        expect(utils.__get__('log')).toHaveBeenCalled();
       });
       it('should return an error', function () {
         expect(err).toBeTruthy();
@@ -265,15 +266,14 @@ describe('Utils functions', function () {
           callback(undefined, {}, 'BadResponseString');
         });
         utils.__set__('req', reqSpy);
-        spyOn(utils, 'log');
         utils.sendRequest(data)
           .then((response) => {
-            body = response.reqData.body;
-            done();
-          })
-          .catch((err) => {
-            done.fail('Promise should be resolved');
-          });
+          body = response.reqData.body;
+        done();
+      })
+        .catch((err) => {
+          done.fail('Promise should be resolved');
+      });
       });
 
       it('should return an empty body object', function() {
@@ -284,13 +284,13 @@ describe('Utils functions', function () {
   });
 
   describe('log function', function () {
-    // TODO Test this function properly
     var wMock, wSpy;
     beforeEach(function () {
       wSpy = jasmine.createSpy('wSpy');
       wMock = {
         test: wSpy
       };
+      utils = rewire('../../server/components/utils.js');
       utils.__set__('w', wMock);
     });
 

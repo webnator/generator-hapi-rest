@@ -2,7 +2,7 @@
   "name": "<%= appUppercaseName %>",
   "version": "0.0.1",
   "description": "Generic backend Hapi App generated with the hapi-rest generator",
-  "main": "server/app.js",
+  "main": "server",
   "dependencies": {
     "hapi": "11.x.x",
     "hapi-auth-jwt2": "5.2.1",
@@ -33,7 +33,7 @@
     "node": ">=0.12.0"
   },
   "scripts": {
-    "start": "node server/app.js"<% if (usesTests) { %>,
+    "start": "node server"<% if (usesTests) { %>,
     "test": "jasmine-node tests --config <%= appPrefix %>_NODE_ENV test --color"<% } %>
   },
   "private": true

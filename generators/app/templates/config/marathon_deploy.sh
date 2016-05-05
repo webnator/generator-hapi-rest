@@ -20,6 +20,22 @@ if [ "$(tr [A-Z] [a-z] <<< "$TAG_EDITED")" != "y" ]; then
   exit
 fi
 
+# Sets the application access
+echo "Please set the level of visibility for your application 0-5 (0 default)"
+echo "\n============================================================================="
+echo "\n======== 0 - (default) Internal service,it won't create an ELB =============="
+echo "\n======== 1 - ELB limited to BBVA                               =============="
+echo "\n======== 2 - ELB limited to BBVA and Wifi Corporate            =============="
+echo "\n======== 3 - ELB limited to Intelygenz                         =============="
+echo "\n======== 4 - ELB limited to Intelygenz and BBVA                =============="
+echo "\n======== 5 - ELB public                                        =============="
+echo "\n============================================================================="
+read IMG_ACCESS
+
+if [ -z "$VAR" ]; then
+  IMG_ACCESS="0"
+fi
+
 CHANGES=`git status --porcelain`
 PUSHED=`git status -b --porcelain  | grep "ahead"`
 
@@ -78,7 +94,7 @@ if [[ -z "$CHANGES" && -z "$PUSHED" ]]; then
   echo "\n================================================="
   echo "\n"
   # Deploys the application in Marathon
-  docker run --rm $DEPLOY_IMG deploy_app $REPO_NAME $TAG_CODE
+  docker run --rm $DEPLOY_IMG deploy_app $REPO_NAME $TAG_CODE $IMG_ACCESS
 
 else
   echo "DEPLOY FAILED"

@@ -1,8 +1,8 @@
 'use strict';
 
-var <%= moduleName %>Responses  = require('./<%= moduleName %>Responses');
+var <%= moduleName %>Responses  = require('./../responses/<%= moduleName %>Responses');
 var Q                 = require('q');
-var Utils             = require('../../components/utils');
+var Utils             = require('../../../components/utils');
 var log               = Utils.log;
 
 exports.defaultAction = function(data){

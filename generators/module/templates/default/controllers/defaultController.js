@@ -1,11 +1,11 @@
 'use strict';
 
-var <%= moduleName %>Responses = require('./<%= moduleName %>Responses');
+var <%= moduleName %>Responses = require('./../responses/<%= moduleName %>Responses');
 
-var Errors        = require('../../components/errors');
-var Utils         = require('../../components/utils');
-var <%= moduleNamePascal %>ModelJoi  = require('./models/<%= moduleName %>ModelJoi');
-var _<%= moduleName %>Utils    = require('./<%= moduleName %>Utils');
+var Errors        = require('../../../components/errors');
+var Utils         = require('../../../components/utils');
+var <%= moduleNamePascal %>ModelJoi  = require('./../models/<%= moduleName %>ModelJoi');
+var _<%= moduleName %>Utils    = require('./../controllers/<%= moduleName %>Utils');
 var log           = Utils.log;
 
 exports.get<%= moduleNamePascal %> = function(request, reply) {

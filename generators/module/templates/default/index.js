@@ -1,6 +1,6 @@
 'use strict';
 
-var <%= moduleName %>Controller = require('./<%= moduleName %>Controller');
+var <%= moduleName %>Controller = require('./controllers/<%= moduleName %>Controller');
 
 module.exports = function(server) {
   server.route({

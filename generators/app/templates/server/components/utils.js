@@ -5,42 +5,75 @@ var GlobalModule  = require('./global');
 var Q             = require('q');
 var Joi           = require('joi');
 var config        = require('../config/environment');
-var w             = require('winston');
 var crypto        = require('crypto');
 const util        = require('util');
 var req           = require('request');
-w.level           = config.loggerLevel;
+var winston       = require('winston');
 
-exports.getCollection = function(colName) {
+var w = new (winston.Logger)({
+  colors: {
+    trace: 'magenta',
+    input: 'grey',
+    verbose: 'cyan',
+    prompt: 'grey',
+    debug: 'blue',
+    info: 'green',
+    data: 'grey',
+    help: 'cyan',
+    warn: 'yellow',
+    error: 'red'
+  }
+});
+
+w.add(winston.transports.Console, {
+  level: config.loggerLevel,
+  prettyPrint: true,
+  colorize: true,
+  silent: false
+  // , timestamp: false
+});
+
+exports.getCollection       = getCollection;
+exports.generateUuid        = generateUuid;
+exports.generateToken       = generateToken;
+exports.encryptText         = encryptText;
+exports.decryptText         = decryptText;
+exports.createResponseData  = createResponseData;
+exports.sendRequest         = sendRequest;
+exports.logData             = logData;
+exports.validateSchema      = validateSchema;
+exports.log                 = log;
+
+function getCollection(colName) {
   return GlobalModule.getConfigValue('db').collection(colName);
-};
+}
 
-exports.generateUuid = function() {
+function generateUuid() {
   return uuid.v4();
-};
+}
 
-exports.generateToken = function(bytes, format){
+function generateToken(bytes, format){
   return crypto.randomBytes(bytes).toString(format);
-};
+}
 
-exports.encryptText = function (encText) {
+function encryptText(encText) {
   var algorithm = 'aes-256-ctr';
   var text = String(encText);
   var cipher = crypto.createCipher(algorithm, config.salt);
   var crypted = cipher.update(text, 'utf8', 'hex');
   crypted += cipher.final('hex');
   return crypted;
-};
+}
 
-exports.decryptText = function (text) {
+function decryptText(text) {
   var algorithm = 'aes-256-ctr';
   var decipher = crypto.createDecipher(algorithm, config.salt);
   var dec = decipher.update(text, 'hex', 'utf8');
   dec += decipher.final('utf8');
   return dec;
-};
+}
 
-exports.createResponseData = function(result, data) {
+function createResponseData(result, data) {
   var response = {
     result: result
   };
@@ -48,11 +81,11 @@ exports.createResponseData = function(result, data) {
     response.data = data;
   }
   return response;
-};
+}
 
-exports.sendRequest = function (data){
+function sendRequest(data){
   var deferred = Q.defer();
-  exports.log('info', data.logData, 'Utils sending request', data.reqData);
+  log('info', data.logData, 'Utils sending request', data.reqData);
   req(data.reqData, function(error, response, body){
     if(typeof body === 'string'){
       try{
@@ -65,25 +98,25 @@ exports.sendRequest = function (data){
     data.reqData.response = response;
 
     if (error) {
-      exports.log('error', data.logData, 'Utils request failed', error);
+      log('error', data.logData, 'Utils request failed', error);
       deferred.reject(error);
     } else {
-      exports.log('info', data.logData, 'Utils request received', body);
+      log('info', data.logData, 'Utils request received', body);
       deferred.resolve(data);
     }
   });
   return deferred.promise;
-};
+}
 
-exports.logData = function(request){
+function logData(request){
   return {
     method: request.method.toUpperCase(),
-    uuid: this.generateUuid(),
+    uuid: generateUuid(),
     path: request.path
   };
-};
+}
 
-exports.validateSchema = function(data){
+function validateSchema(data){
   var deferred  = Q.defer();
 
   Joi.validate(data.payload, data.schema, function(err) {
@@ -100,10 +133,11 @@ exports.validateSchema = function(data){
   });
 
   return deferred.promise;
-};
+}
 
-exports.log = function(level, generalData, description, extraData){
+function log(level, generalData, description, extraData){
   //TODO check all the possilble log occurences and levels
+  extraData = config.logExtradata ? extraData : {};
   var date = new Date().toISOString();
   var uudi = generalData.uuid || '';
   //TODO fix undefined issues
@@ -115,4 +149,4 @@ exports.log = function(level, generalData, description, extraData){
     var path = generalData.path; //|| "PATH ERROR";
     w[level](util.format( '%s [%s] %s | %s | %s %s | %s | extraData: %j', date, uudi, config.host, config.appName, method, path, description, extraData || {}));
   }
-};
+}

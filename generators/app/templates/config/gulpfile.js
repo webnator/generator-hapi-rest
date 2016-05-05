@@ -16,7 +16,7 @@ gulp.task('lint', function() {
 
 gulp.task('start', [<% if (usesRAML) { %>'apidoc', <% } %>'lint' <% if (usesTests) { %>, 'test' <% } %>], function () {
   nodemon({
-    script: 'server/app.js',
+    script: 'server',
     ext: 'js',
     env: { '<%= appPrefix %>_NODE_ENV': 'development' },
     tasks: ['lint']
@@ -36,7 +36,11 @@ gulp.task('apidoc', function() {
 
 <% if (usesTests) { %>
 gulp.task('pre-test', function () {
-  return gulp.src(['./server/**/*.js'])
+  return gulp.src([
+      './server/**/*.js',
+      '!./server/**/index.js',
+      '!./server/config/environment/**/*'
+    ])
     .pipe(istanbul({
       instrumenter: isparta.Instrumenter,
       includeUntested: true
@@ -51,15 +55,16 @@ gulp.task('test', ['pre-test'], function() {
     .pipe(env)           // Sets the environment
     .pipe(jasmine())
     .pipe(istanbul.writeReports({
-      reporters: ['text', 'text-summary']
+      reporters: ['text', 'text-summary', 'html', 'cobertura'],
+      reportOpts: { dir: './coverage' }
     }))
-    // .pipe(istanbul.enforceThresholds({ thresholds: { global: 85 } }))
+    // .pipe(istanbul.enforceThresholds({ thresholds: { global: 75 } }))
     .pipe(env.restore());
 });
 
 gulp.task('tests.watch', function () {
   gulp.start('test');
-  gulp.watch('./tests/**/*.js', ['test']);
+  gulp.watch('./tests/**/*.js', { verbose: true } ['test']);
 });
 
 <% } %>

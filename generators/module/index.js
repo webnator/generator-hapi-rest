@@ -55,20 +55,20 @@ module.exports = yeoman.Base.extend({
     };
 
     this.template(
-      this.templatePath('default/defaultController.js'),
-      this.destinationPath('server/api/' + this.moduleName + '/' + this.moduleName + 'Controller.js'),
+      this.templatePath('default/controllers/defaultController.js'),
+      this.destinationPath('server/api/' + this.moduleName + '/controllers/' + this.moduleName + 'Controller.js'),
       templateVars
     );
 
     this.template(
-      this.templatePath('default/defaultResponses.js'),
-      this.destinationPath('server/api/' + this.moduleName + '/' + this.moduleName + 'Responses.js'),
+      this.templatePath('default/controllers/defaultUtils.js'),
+      this.destinationPath('server/api/' + this.moduleName + '/controllers/' + this.moduleName + 'Utils.js'),
       templateVars
     );
 
     this.template(
-      this.templatePath('default/defaultUtils.js'),
-      this.destinationPath('server/api/' + this.moduleName + '/' + this.moduleName + 'Utils.js'),
+      this.templatePath('default/responses/defaultResponses.js'),
+      this.destinationPath('server/api/' + this.moduleName + '/responses/' + this.moduleName + 'Responses.js'),
       templateVars
     );
 

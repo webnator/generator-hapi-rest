@@ -1,3 +1,4 @@
+<% if (!groupedApp) { %>
 {
   "id": "<%= appName %>",
   "args": ["<%= appName %>/dev"],
@@ -36,3 +37,50 @@
     }
   ]
 }
+
+<% }else { %>
+{
+  "id": "/<%= appGroup %>",
+  "apps": [{
+    "id": "<%= appName %>",
+    "args": ["<%= appGroup %>/<%= appName %>/dev"],
+    "cpus": 0.2,
+    "mem": 512.0,
+    "dependencies": ["/mongo"],
+    "container": {
+      "type": "DOCKER",
+      "docker": {
+        "image": "REPLACE_FOR_REGISTRY/kst/<%= appName %>:0.0.1",
+        "forcePullImage": true,
+        "network": "BRIDGE",
+        "portMappings": [{
+          "containerPort": 9000,
+          "hostPort": 0,
+          "protocol": "tcp"
+        }]
+      }
+    },
+    "labels": {
+      "project": "<%= appGroup %>",
+      "subproject": "backend,<%= appName %>",
+      "tags": "<%= appGroup %>,backend,<%= appName %>",
+      "elb": "true"
+    },
+    "constraints": [
+      ["hostname", "UNIQUE"]
+    ],
+    "env": {
+      "CONSUL": "consul.service.consul:8500"
+    },
+    "healthChecks": [{
+      "type": "tcp",
+      "protocol": "TCP",
+      "portIndex": 0,
+      "gracePeriodSeconds": 30,
+      "intervalSeconds": 20,
+      "maxConsecutiveFailures": 5,
+      "path": "/v1/<%= appName %>/health"
+    }]
+  }]
+}
+<% } %>
