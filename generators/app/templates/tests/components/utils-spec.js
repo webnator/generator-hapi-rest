@@ -292,6 +292,7 @@ describe('Utils functions', function () {
       };
       utils = rewire('../../server/components/utils.js');
       utils.__set__('w', wMock);
+      utils.__set__('config.logExtradata', true);
     });
 
     it('shoul call w', function () {
@@ -329,6 +330,7 @@ describe('Utils functions', function () {
     });
 
     it('shoul call w when general data is an object without description', function () {
+      utils.__set__('config.logExtradata', false);
       var data = {
         method: 'test',
         path: 'testPath'

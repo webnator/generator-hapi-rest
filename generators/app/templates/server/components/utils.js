@@ -137,7 +137,7 @@ function validateSchema(data){
 
 function log(level, generalData, description, extraData){
   //TODO check all the possilble log occurences and levels
-  extraData = config.logExtradata ? extraData : {};
+  extraData = config.logExtradata ? extraData : undefined;
   var date = new Date().toISOString();
   var uudi = generalData.uuid || '';
   //TODO fix undefined issues

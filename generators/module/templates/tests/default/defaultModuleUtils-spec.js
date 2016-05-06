@@ -3,8 +3,8 @@
 var rewire = require("rewire");
 var Q     = require('q');
 
-describe('defaultModuleUtils functions', function () {
-  var defaultModuleUtils = rewire('../../server/api/defaultModule/controllers/defaultModuleUtils.js');
+describe('<%= moduleName %>Utils functions', function () {
+  var <%= moduleName %>Utils = rewire('../../server/api/<%= moduleName %>/controllers/<%= moduleName %>Utils.js');
 
   var UtilsMock;
 
@@ -12,14 +12,14 @@ describe('defaultModuleUtils functions', function () {
     UtilsMock = {
       log: jasmine.createSpy('utilsSpy')
     };
-    defaultModuleUtils.__set__('Utils', UtilsMock);
-    defaultModuleUtils.__set__('log', UtilsMock.log);
+    <%= moduleName %>Utils.__set__('Utils', UtilsMock);
+    <%= moduleName %>Utils.__set__('log', UtilsMock.log);
   });
 
   describe('defaultAction', function () {
 
     it('should resolve by default', function (done) {
-      defaultModuleUtils.defaultAction({}).then(function () {
+      <%= moduleName %>Utils.defaultAction({}).then(function () {
         expect(UtilsMock.log).toHaveBeenCalled();
         done();
       }, function (err) {
@@ -29,8 +29,8 @@ describe('defaultModuleUtils functions', function () {
     });
 
     it('should reject if resolve is false', function (done) {
-      defaultModuleUtils.__set__('resolve', false);
-      defaultModuleUtils.defaultAction({}).then(function () {
+      <%= moduleName %>Utils.__set__('resolve', false);
+      <%= moduleName %>Utils.defaultAction({}).then(function () {
         done.fail('Promise shouldn\'t resolve');
       }, function () {
         expect(UtilsMock.log).toHaveBeenCalled();

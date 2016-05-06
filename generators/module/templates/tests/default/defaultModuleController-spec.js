@@ -82,7 +82,7 @@ describe('<%= moduleName %>Controller functions', function () {
 			}
 		});
 
-		<%= moduleName %>Controller.getDefaultModule(req, rep, next);
+		<%= moduleName %>Controller.get<%= moduleNamePascal %>(req, rep, next);
 	});
 
 	it('should return an error in case of a failed promise', function (done) {
@@ -110,7 +110,7 @@ describe('<%= moduleName %>Controller functions', function () {
 			}
 		});
 
-		<%= moduleName %>Controller.getDefaultModule(req, rep, next);
+		<%= moduleName %>Controller.get<%= moduleNamePascal %>(req, rep, next);
 	});
 
 	it('should return an error in case of a failed promise and not call next function', function (done) {
@@ -139,6 +139,6 @@ describe('<%= moduleName %>Controller functions', function () {
 			}
 		});
 
-		<%= moduleName %>Controller.getDefaultModule(req, rep, next);
+		<%= moduleName %>Controller.get<%= moduleNamePascal %>(req, rep, next);
 	});
 });

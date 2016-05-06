@@ -2,18 +2,18 @@
 
 var rewire = require("rewire");
 
-describe('defaultModuleModel functions', function () {
-  var defaultModuleModel = rewire('../../server/api/defaultModule/models/defaultModuleModel.js');
+describe('<%= moduleName %>Model functions', function () {
+  var <%= moduleName %>Model = rewire('../../server/api/<%= moduleName %>/models/<%= moduleName %>Model.js');
 
   beforeAll(function () {
-    spyOn(defaultModuleModel.__get__('crypto'), 'createHash').and.callThrough();
+    spyOn(<%= moduleName %>Model.__get__('crypto'), 'createHash').and.callThrough();
   });
 
   it('should return a valid model', function () {
-    var defaultModule = new defaultModuleModel({});
+    var <%= moduleName %> = new <%= moduleName %>Model({});
 
-    expect(defaultModuleModel.__get__('crypto').createHash).toHaveBeenCalled();
-    expect(defaultModule.dateCreated).toEqual(jasmine.any(Date));
+    expect(<%= moduleName %>Model.__get__('crypto').createHash).toHaveBeenCalled();
+    expect(<%= moduleName %>.dateCreated).toEqual(jasmine.any(Date));
 
   });
 
