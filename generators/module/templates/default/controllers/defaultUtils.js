@@ -5,10 +5,11 @@ var Q                 = require('q');
 var Utils             = require('../../../components/utils');
 var log               = Utils.log;
 
+var resolve = true;
+
 exports.defaultAction = function(data){
   var deferred = Q.defer();
-
-  if (true !== false) {
+  if (resolve !== false) {
     log('info', data.logData, '<%= moduleName %>Action (Promise) OK');
     deferred.resolve(data);
   } else {

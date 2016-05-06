@@ -39,8 +39,8 @@ var init = function () {
     // Create a server with a host and port
     server = new Hapi.Server();
     server.connection({port: config.port, routes: {cors: true}});
-    // JWT Auth Strategy
   <% if (usesAuth) { %>
+    // JWT Auth Strategy
     server.register(hapiAuthJWT, function (err) {
       if (err) {
         return reject(err);

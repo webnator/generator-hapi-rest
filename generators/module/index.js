@@ -92,8 +92,18 @@ module.exports = yeoman.Base.extend({
 
     if (usesTests === true) {
       this.template(
-        this.templatePath('tests/default/default-spec.js'),
-        this.destinationPath('tests/' + this.moduleName + '/' + this.moduleName + '-spec.js'),
+        this.templatePath('tests/default/defaultModuleController-spec.js'),
+        this.destinationPath('tests/' + this.moduleName + '/' + this.moduleName + 'Controller-spec.js'),
+        templateVars
+      );
+      this.template(
+        this.templatePath('tests/default/defaultModuleModel-spec.js'),
+        this.destinationPath('tests/' + this.moduleName + '/' + this.moduleName + 'Model-spec.js'),
+        templateVars
+      );
+      this.template(
+        this.templatePath('tests/default/defaultModuleUtils-spec.js'),
+        this.destinationPath('tests/' + this.moduleName + '/' + this.moduleName + 'Utils-spec.js'),
         templateVars
       );
     }
