@@ -1,7 +1,7 @@
 <%= appName %>:
   container_name: <%= appName %>
   command: "<%= appName %>/loc"
-  image: "<%= dockerRepo %>/framework/<%= appName %>:0.0.1
+  image: "<%= dockerRepo %>/framework/<%= appName %>:0.0.1"
   links:
     - mongo
   ports:
@@ -13,5 +13,5 @@ mongo:
   container_name: genesis-mongo
   command: '--smallfiles --dbpath=/tmp'
   ports:
-    - "27017:27017"
+    - "27000:27017"
   image: <%= dockerRepo %>/mongo:latest

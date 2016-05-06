@@ -3,7 +3,7 @@
 # User config vars
 CONFIG_REGISTRY="<%= dockerRepo %>"
 APP_IMG=$CONFIG_REGISTRY"/nodejs:onbuild"
-DEPLOY_IMG=$CONFIG_REGISTRY"/architecture/ops:0.2.0"
+DEPLOY_IMG=$CONFIG_REGISTRY"/architecture/ops:0.3.5"
 
 # Global vars
 APP_NAME=`cat marathon.json | jq .id -r`
@@ -94,7 +94,9 @@ if [[ -z "$CHANGES" && -z "$PUSHED" ]]; then
   echo "\n================================================="
   echo "\n"
   # Deploys the application in Marathon
-  docker run --rm $DEPLOY_IMG deploy_app $REPO_NAME $TAG_CODE $IMG_ACCESS
+  echo "Write the path to your ssh key file"
+  read SSH_FILE
+  docker run --rm -v $SSH_FILE:/ops/ssh/id_rsa $DEPLOY_IMG deploy_app $REPO_NAME $TAG_CODE $IMG_ACCESS
 
 else
   echo "DEPLOY FAILED"

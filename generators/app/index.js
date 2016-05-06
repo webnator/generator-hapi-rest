@@ -23,7 +23,7 @@ module.exports = yeoman.Base.extend({
       {
         type: 'input',
         name: 'appPrefix',
-        message: 'What will be the preffix of your application:',
+        message: 'What will be the consul prefix of your application:',
         default: this.appName
       },
       {

@@ -18,7 +18,7 @@ gulp.task('start', [<% if (usesRAML) { %>'apidoc', <% } %>'lint' <% if (usesTest
   nodemon({
     script: 'server',
     ext: 'js',
-    env: { '<%= appPrefix %>_NODE_ENV': 'development' },
+    env: { '<%= appPrefix %>_NODE_ENV': 'local' },
     tasks: ['lint']
   })
   .on('restart', function () {

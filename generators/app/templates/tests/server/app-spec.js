@@ -41,7 +41,7 @@ describe('Server app', function () {
 describe('Server Hapi mock', function () {
   var app = rewire('../../server/app.js');
 
-  var serverMock, HapiMock, setAuthStrategyMock, GlobalModuleMock;
+  var serverMock, HapiMock, <% if (usesAuth) { %>setAuthStrategyMock, <% } %>GlobalModuleMock;
 
   describe('Success callbacks', function () {
     beforeEach(function (done) {
@@ -50,7 +50,9 @@ describe('Server Hapi mock', function () {
       setSpies();
 
       app.__set__('Hapi', HapiMock);
+      <% if (usesAuth) { %>
       app.__set__('setAuthStrategy', setAuthStrategyMock);
+      <% } %>
       app.__set__('GlobalModule', GlobalModuleMock);
 
       app.init().then(function () {
@@ -89,7 +91,9 @@ describe('Server Hapi mock', function () {
       setSpies();
 
       app.__set__('Hapi', HapiMock);
+      <% if (usesAuth) { %>
       app.__set__('setAuthStrategy', setAuthStrategyMock);
+      <% } %>
       app.__set__('GlobalModule', GlobalModuleMock);
     });
 
@@ -172,9 +176,11 @@ describe('Server Hapi mock', function () {
         return serverMock;
       }
     };
+    <% if (usesAuth) { %>
     setAuthStrategyMock = function () {
       return true;
     };
+    <% } %>
     GlobalModuleMock = {
       getConfigValue: function() {
         return {close: function(){}};
