@@ -20,14 +20,14 @@
     "jshint": "2.x",
     "gulp-jshint": "2.0.0",
     "gulp-nodemon": "2.0.4",
-    "gulp-shell": "^0.5.2"
-    <% if (usesRAML) { %>, "gulp-raml2html": "^0.2.0"<% } %>
-    <% if (usesTests) { %>, "gulp-istanbul": "^0.10.4",
-    "gulp-jasmine": "^2.3.0",
+    "gulp-shell": "0.5.2"
+    <% if (usesRAML) { %>, "gulp-raml2html": "0.2.0"<% } %>
+    <% if (usesTests) { %>, "gulp-istanbul": "0.10.4",
+    "gulp-jasmine": "2.3.0",
     "gulp-process-env": "0.0.1",
-    "isparta": "^4.0.0",
-    "jasmine-node": "^1.14.5",
-    "rewire": "^2.5.1"<% } %>
+    "isparta": "4.0.0",
+    "jasmine-node": "1.14.5",
+    "rewire": "2.5.1"<% } %>
   },
   "engines": {
     "node": ">=0.12.0"
