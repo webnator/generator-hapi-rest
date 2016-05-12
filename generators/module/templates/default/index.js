@@ -11,9 +11,7 @@ module.exports = function(server) {
       tags: ['api', '<%= moduleName %>'],
       description: 'Default <%= moduleName %> get request'
     },
-    handler: function(request, reply, next) {
-  <%= moduleName %>Controller.get<%= moduleNamePascal %>(request, reply, next);
-    }
+    handler: <%= moduleName %>Controller.get<%= moduleNamePascal %>;
   });
 
 };
