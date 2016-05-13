@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-var rewire = require("rewire");
+var rewire = require('rewire');
 var Q     = require('q');
 
 describe('<%= moduleName %>Utils functions', function () {

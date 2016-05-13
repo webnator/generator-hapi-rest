@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-var rewire = require("rewire");
+var rewire = require('rewire');
 
 describe('<%= moduleName %>Model functions', function () {
   var <%= moduleName %>Model = rewire('../../server/api/<%= moduleName %>/models/<%= moduleName %>Model.js');

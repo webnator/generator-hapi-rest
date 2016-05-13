@@ -13,5 +13,4 @@ module.exports = function(server) {
     },
     handler: <%= moduleName %>Controller.get<%= moduleNamePascal %>
   });
-
 };
