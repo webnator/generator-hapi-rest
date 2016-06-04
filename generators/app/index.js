@@ -200,7 +200,7 @@ module.exports = yeoman.Base.extend({
       this.spawnCommandSync('git', ['push', '-u', 'origin', 'master']);
     }
 
-    this.spawnCommand('sh', [this.sourceRoot() + '/../ops/consulVars.sh', this.projectName + '/dev', this.props.appPrefix, this.projectName]);
+    //this.spawnCommand('sh', [this.sourceRoot() + '/../ops/consulVars.sh', this.projectName + '/dev', this.props.appPrefix, this.projectName]);
 
     this.npmInstall();
   },
