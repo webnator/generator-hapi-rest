@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-CONSUL_DOMAIN="dev.consul.kickstartteam.es"
+CONSUL_DOMAIN=""
 CONSUL_API_KV="/v1/kv"
 CONSUL_API_PORT="8500"
-MASTER_TOKEN="dad5b3ce-7df0-4f82-9a53-2f394f45a1b8"
+MASTER_TOKEN=""
 
 APP_NAME=$1
 PREFIX=$2
