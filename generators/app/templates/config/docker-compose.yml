@@ -10,7 +10,7 @@
     CONSUL: <%= consulRepo %>
 
 mongo:
-  container_name: genesis-mongo
+  container_name: mongo
   command: '--smallfiles --dbpath=/tmp'
   ports:
     - "27000:27017"
